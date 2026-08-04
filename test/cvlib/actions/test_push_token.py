@@ -69,6 +69,14 @@ def test_validate_push_token_params_rejects_bad_filename():
     assert exc_info.value.details["field"] == "filename"
 
 
+def test_validate_accepts_upstream_default_filename():
+    # Default from push-token-action-pack_1.2.1 config.yaml (2026.1.0 release).
+    params = validate_push_token_params(
+        {"filename": "/tmp/cv-onboarding-token", "token": "t"}
+    )
+    assert params.filename == "/tmp/cv-onboarding-token"
+
+
 def test_validate_push_token_params_requires_filename():
     with pytest.raises(WorkflowActionError) as exc_info:
         validate_push_token_params({"token": "t"})

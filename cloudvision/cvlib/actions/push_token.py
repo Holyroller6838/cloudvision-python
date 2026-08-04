@@ -6,6 +6,10 @@
 
 Original CloudVision ``push-token`` action (reviewed for Itential use)
 --------------------------------------------------------------------
+Baseline:
+https://github.com/aristanetworks/cloudvision-python-actions/releases/tag/2026.1.0
+(``push-token-action-pack_1.2.1.tar``).
+
 The stock action is a top-level script that reads ``token`` / ``filename``
 from ``ctx.action.args``, builds EOS CLI commands with the raw token, and
 raises ``ActionFailed`` on device errors.  When that pattern is dropped

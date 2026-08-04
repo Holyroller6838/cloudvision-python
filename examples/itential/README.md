@@ -3,27 +3,38 @@
 This directory documents how CloudVision Python Actions should be structured
 when they are invoked from an Itential workflow (`runService` / `runCode`).
 
-## Review: stock `push-token` action
+## Baseline reviewed
 
-The upstream CloudVision `push-token` action is effectively:
+**Release:** [cloudvision-python-actions 2026.1.0](https://github.com/aristanetworks/cloudvision-python-actions/releases/tag/2026.1.0)  
+**Asset:** `push-token-action-pack_1.2.1.tar`  
+**Original files:** [`original/push-token/`](original/push-token/)
+
+## Review: stock `push-token` action
 
 ```python
 token = ctx.action.args.get("token")
 filename = ctx.action.args.get("filename")
-cmds = ["enable", {"cmd": f"copy terminal: file:{filename}", "input": token}]
+cmds = [
+    "enable",
+    {"cmd": f"copy terminal: file:{filename}", "input": token},
+]
 cmdResponses = ctx.runDeviceCmds(cmds)
 errs = [resp.get("error") for resp in cmdResponses if resp.get("error")]
 if errs:
     raise ActionFailed(f"Copying of token to {filename} failed with: {errs[0]}")
 ```
 
+The pack’s `config.yaml` also declares `token` as a required plaintext
+`dynamic-param` (not a secret), so the credential is part of the action /
+workflow input surface by design.
+
 Issues when that script is used from an Itential workflow:
 
 | Risk | What goes wrong |
 |------|-----------------|
 | JSON serialization | No return value. Downstream workflow tasks have nothing JSON-safe to consume. |
-| Credentials in logs | `token` is a workflow argument and sits inside `cmds`. Logging args/commands leaks the secret into Job Viewer. |
-| Unclear failures | Missing `token`/`filename` surfaces as `TypeError`/`AttributeError`, not a clear validation error. |
+| Credentials in logs | `token` is a required dynamic arg and sits inside `cmds`. Logging args/commands leaks the secret into Job Viewer. |
+| Unclear failures | Missing/invalid `token`/`filename` surfaces as `TypeError`/`AttributeError`, not a clear validation error. |
 | Vendor-specific | Hard dependency on CloudVision `ctx` and EOS `copy terminal: file:`. |
 
 ## Refactored implementation
@@ -47,7 +58,7 @@ class GatewayCommander:
         return device_api.run(commands)  # return list[dict]
 
 def main(params: dict) -> dict:
-    # params example: {"filename": "token.txt", "token_env": "CVP_TOKEN"}
+    # params example: {"filename": "/tmp/cv-onboarding-token", "token_env": "CVP_TOKEN"}
     return push_token(GatewayCommander(), params)
 ```
 
