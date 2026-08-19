@@ -4,6 +4,7 @@
 
 """Helpers and actions designed for workflow orchestration platforms."""
 
+from .ab_upgrade import pair_readiness, validate_pair_readiness_params
 from .commander import (
     DeviceCommander,
     EosCtxCommander,
@@ -34,11 +35,13 @@ __all__ = [
     "command_text",
     "ensure_json_serializable",
     "first_command_error",
+    "pair_readiness",
     "parse_software_version",
     "plan_software_upgrade",
     "redact_secrets",
     "run_from_cv_context",
     "software_upgrade",
+    "validate_pair_readiness_params",
     "validate_software_upgrade_params",
     "workflow_result",
 ]
