@@ -3,6 +3,10 @@
 This directory documents how CloudVision Python Actions should be structured
 when they are invoked from an Itential workflow (`runService` / `runCode`).
 
+## CVP connectivity smoke test (cvprac)
+
+Paste [`cvp_inventory_lookup.py`](cvp_inventory_lookup.py) into IAG Run Code. It authenticates to `192.168.224.18:443` with `$GATEWAYSECRET(cvp-token)` and only calls `get_inventory()` to look up `USILD001LAB01A`. See [`cvp_inventory_lookup.md`](cvp_inventory_lookup.md) for `/cvpservice` vs `/web` and certificate options.
+
 ## MVP1: read-only A/B pair readiness
 
 Use [`ab_upgrade/`](ab_upgrade/) / `cloudvision.cvlib.actions.ab_upgrade.pair_readiness`.
