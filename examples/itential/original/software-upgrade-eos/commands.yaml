@@ -1,0 +1,31 @@
+# Extracted from itentialopensource/pre-built-automations/arista-eos-iag
+# Workflow: Software Upgrade - EOS
+# Templates: EOS - File Verification, EOS - Software Upgrade Checks,
+#            EOS - Set Boot Config, EOS - Reload, EOS - Show Version
+
+file_verification:
+  - show ver
+  - dir <flashMemory>/<image>
+  - show running-config | inc boot
+
+software_upgrade_checks:
+  - show ver
+  - show running
+  - show ip int br
+  - show license
+  - show clock
+  - show logging
+  - show platform bios
+  - show boot
+
+set_boot_config: |
+  conf t
+  boot system {{flashMemory}}{{image}}
+  exit
+  write
+
+reload:
+  - reload force
+
+show_version:
+  - show version
