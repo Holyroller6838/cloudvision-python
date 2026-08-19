@@ -3,6 +3,13 @@
 This directory documents how CloudVision Python Actions should be structured
 when they are invoked from an Itential workflow (`runService` / `runCode`).
 
+## MVP1: read-only A/B pair readiness
+
+Use [`ab_upgrade/`](ab_upgrade/) / `cloudvision.cvlib.actions.ab_upgrade.pair_readiness`.
+It collects identity, connectivity, EOS version, MLAG, BGP, and interface
+status from two devices and evaluates pair readiness in Python. It never
+invokes `software_upgrade()` and never sends configure/boot/reload commands.
+
 ## Baseline reviewed
 
 **Pre-built:** [Software Upgrade - EOS](https://gitlab.com/itentialopensource/pre-built-automations/arista-eos-iag/-/blob/master/documentation/Software%20Upgrade%20-%20EOS.md)  
