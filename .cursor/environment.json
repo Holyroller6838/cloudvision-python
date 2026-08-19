@@ -1,0 +1,4 @@
+{
+  "name": "cloudvision-python",
+  "install": "python3 -m pip install --no-cache-dir 'cython<3.0.0' && python3 -m pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt && python3 -m pip install --no-cache-dir ."
+}
