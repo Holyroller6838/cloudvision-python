@@ -1,0 +1,33 @@
+# Sample MLAG inputs for existing EOS lab switches LAB01A and LAB01B.
+# All interface names, VLAN IDs, peer IPs, and MLAG IDs are configurable.
+
+domain_id: LAB01
+peer_vlan: 4094
+peer_vlan_name: MLAG_PEER
+peer_link_description: MLAG Peer Link
+
+peer_link:
+  port_channel: Port-Channel10
+  members:
+    - Ethernet49
+    - Ethernet50
+  trunk_group: mlagpeer
+
+downstream:
+  port_channel: Port-Channel20
+  members:
+    - Ethernet1
+  mlag_id: 20
+  description: Downstream LACP
+  switchport_mode: trunk
+  trunk_allowed_vlans: "10,20,30"
+
+devices:
+  LAB01A:
+    peer_svi_ip: 10.255.255.1/30
+    peer_address: 10.255.255.2
+    # Optional per-device override of downstream.mlag_id (shared by default)
+    # mlag_id: 20
+  LAB01B:
+    peer_svi_ip: 10.255.255.2/30
+    peer_address: 10.255.255.1
